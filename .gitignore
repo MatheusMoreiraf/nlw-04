@@ -1,6 +1,10 @@
-# The entire folder
+### The entire folder ###
 .idea/
 node_modules/
+
+### Database ###
+*.sqlite
+
 ### yarn ###
 # https://yarnpkg.com/advanced/qa#which-files-should-be-gitignored
 
