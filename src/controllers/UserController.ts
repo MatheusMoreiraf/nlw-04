@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import { getCustomRepository } from 'typeorm';
-import { UserRepository } from '../repositories/UserRepository';
 import * as yup from 'yup';
+import { UserRepository } from '../repositories/UserRepository';
+import { AppError } from '../errors/AppError';
 
 class UserController {
     async create(request: Request, response: Response) {
@@ -15,7 +16,7 @@ class UserController {
         try {
             await schema.validate(request.body, { abortEarly: false });
         } catch (err) {
-            return response.status(400).json({ error: err });
+            throw new AppError(err);
         }
 
         const userRepository = getCustomRepository(UserRepository);
@@ -25,9 +26,7 @@ class UserController {
         });
 
         if(userAlreadyExisty) {
-            return response.status(400).json({
-                error: "User already exists!"
-            });
+            throw new AppError("User already exists!");
         }
 
         const user = userRepository.create({
